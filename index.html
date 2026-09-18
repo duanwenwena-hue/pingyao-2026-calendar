@@ -49,11 +49,14 @@
 <div class="mask" id="calendarModal" hidden>
   <section class="sheet calendarSheet">
     <div class="sheetTop"><div><div class="calendarTitle" id="calendarTitle"></div><div class="calendarSub" id="calendarSub"></div></div><button class="close" data-close="calendarModal">×</button></div>
-    <div class="calendarPreview" id="calendarPreview"></div>
-    <canvas id="shareCanvas" width="750" height="1200" aria-hidden="true"></canvas>
-    <div class="actions"><button id="saveImage">保存图片</button><button id="shareImage">分享图片</button></div>
-    <div class="ready" id="ready"></div>
-    <button class="cancel" data-close="calendarModal">返回继续选片</button>
+    <div class="calendarConfirm">
+      <div class="confirmIcon">✓</div>
+      <div class="confirmTitle">观影日程已生成</div>
+      <div class="confirmText" id="calendarConfirmText"></div>
+      <div class="ready" id="ready">正在生成图片……</div>
+    </div>
+    <canvas id="shareCanvas" width="750" height="1200" class="canvasHidden" aria-hidden="true"></canvas>
+    <div class="actions"><button id="saveImage" disabled>保存图片</button><button class="cancelBtn" data-close="calendarModal">返回继续选片</button></div>
   </section>
 </div>
 
