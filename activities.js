@@ -14,7 +14,7 @@ const MASTER_ACTIVITIES = [
     title:"小城春未远——费穆120周年诞辰与《小城之春》修复（暨《小城之春》放映）",
     en:"SPRING LINGERS IN THE SMALL TOWN · FEI MU AT 120: THE RESTORATION OF SPRING IN A SMALL TOWN",
     venue:"小城之春 SPRING IN A SMALL TOWN", kind:"大师·对话",
-    guests:"田壮壮 TIAN ZHUANGZHUANG；李焯桃 LI CHEUK TO；黎涛 LI TAO；李镇 LI ZHEN", moderator:"沙丹 SHA DAN"
+    guests:"田壮壮 TIAN ZHUANGZHUANG\n（导演、制片人、演员，代表作《盗马贼》《猎场扎撒》《小城之春》等）\n\n李焯桃 LI CHEUK TO\n（影评人，香港电影评论学会董事局主席，M+香港电影及媒体研究策展人）\n\n黎涛 LI TAO\n（国家一级导演，中国电影资料馆AI修复实验室负责人）\n\n李镇 LI ZHEN\n（中国电影艺术研究中心电影史学研究部副主任、研究员）", moderator:"沙丹 SHA DAN\n（中国电影资料馆公共事业部主任、节目策划，北京国际电影节展映策展人）"
   },
   {
     date:"9/27", weekday:"周日", start:"10:00", end:"11:30",
