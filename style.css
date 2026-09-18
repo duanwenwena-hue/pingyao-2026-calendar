@@ -6,3 +6,16 @@
 .calendarConfirm .ready{margin:18px 0 0;color:#4F715B;min-height:18px}
 .actions .cancelBtn{flex:1;background:#DDD5C5;color:#3D4848;border-radius:4px;font-size:13px;padding:9px}
 .actions button:disabled{opacity:.45;cursor:default}
+
+/* 微信内保存图片兼容层：不跳转新页面，直接在当前 H5 内展示可长按保存的图片 */
+.saveGuideMask{position:fixed;inset:0;background:rgba(10,27,29,.88);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.saveGuide{width:min(92vw,680px);max-height:94vh;overflow:auto;background:var(--cream);border-radius:16px;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 12px 40px rgba(0,0,0,.28)}
+.saveGuideTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.saveGuideTitle{font-size:20px;font-weight:900;color:var(--teal)}
+.saveGuideSub{font-size:12px;color:var(--muted);line-height:1.5;margin-top:4px}
+.saveGuideClose{background:transparent;color:#69717B;font-size:30px;line-height:1;padding:0 2px}
+.saveGuideImgWrap{margin:14px auto 10px;max-width:520px;background:#fff;border-radius:8px;padding:5px;box-shadow:0 3px 14px rgba(23,54,58,.12)}
+.saveGuideImg{display:block;width:100%;height:auto;border-radius:5px;-webkit-touch-callout:default;user-select:none}
+.saveGuideTip{text-align:center;font-size:13px;font-weight:800;color:var(--teal);line-height:1.6;margin:10px 4px 2px}
+.saveGuideTip small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.saveGuideBack{width:100%;margin-top:12px;background:#DDD5C5;color:#3D4848;font-size:13px;border-radius:4px;padding:9px}
