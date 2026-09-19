@@ -33,7 +33,7 @@ const POSTER_MAP = {
   "空中花园": "assets/posters/08df108f-a138-41d9-84b8-0448c9d97919.jpg",
   "空闲的日子": "assets/posters/08df108f-0d68-4d6e-8413-e1982f71badd.jpg",
   "第四幕": "assets/posters/08df13cf-1e54-427e-8010-43255d4cf8ed.jpg",
-  "纸老虎": "assets/posters/08df13e8-5736-4ad2-86c5-b426f08818ba.jpg",
+  "纸老虎": "assets/posters/paper_tiger_user.png",
   "罗维雷将军": "assets/posters/08df1480-b4ba-4f89-8095-75668d818a0f.jpg",
   "美国心（4K修复版）": "assets/posters/08df13d0-a7cc-4957-86d5-bb582d55fad0.jpg",
   "胡越的故事（4K修复版）": "assets/posters/08df13f8-2a65-44e0-8a5d-42955505d7dc.jpg",
