@@ -27,13 +27,54 @@ function allSaved(){const all=loadAll(),films=[],activities=[],specials=[],valid
 function showToast(msg){toastEl.textContent=msg;toastEl.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.classList.remove("show"),1800)}
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
+let filterScroll={date:0,unit:0};
+function rememberFilterScroll(){
+  const dr=daysEl.querySelector(".dateFilterRow");
+  const ur=daysEl.querySelector(".unitFilterRow");
+  if(dr) filterScroll.date=dr.scrollLeft;
+  if(ur) filterScroll.unit=ur.scrollLeft;
+}
+function restoreFilterScroll(){
+  requestAnimationFrame(()=>{
+    const dr=daysEl.querySelector(".dateFilterRow");
+    const ur=daysEl.querySelector(".unitFilterRow");
+    if(dr) dr.scrollLeft=filterScroll.date;
+    if(ur) ur.scrollLeft=filterScroll.unit;
+    [dr,ur].forEach(row=>{
+      if(!row) return;
+      const active=row.querySelector(".active");
+      if(!active) return;
+      const r=row.getBoundingClientRect();
+      const a=active.getBoundingClientRect();
+      if(a.left<r.left || a.right>r.right){
+        const target=row.scrollLeft+(a.left+a.width/2)-(r.left+r.width/2);
+        row.scrollLeft=Math.max(0,Math.min(target,row.scrollWidth-row.clientWidth));
+      }
+    });
+  });
+}
 function renderDays(){
   daysEl.innerHTML=`<div class="filterRow dateFilterRow">${["全部",...days].map(d=>`<button class="day ${selected===d?"active":""}" data-day="${d}">${d}</button>`).join("")}</div><div class="filterRow unitFilterRow">${["全部","藏龙","卧虎","首映","大师班","平遥十年","特别展映","藏龙短片","平遥一角"].map(u=>`<button class="unitFilter ${selectedUnit===u?"active":""}" data-unit="${u}">${u}</button>`).join("")}</div>`;
   daysEl.querySelectorAll(".day").forEach(b=>b.onclick=()=>chooseDay(b.dataset.day));
   daysEl.querySelectorAll(".unitFilter").forEach(b=>b.onclick=()=>chooseUnit(b.dataset.unit));
+  restoreFilterScroll();
 }
-function chooseDay(day){saveCurrentDay();selected=day;if(day!=="全部")localStorage.setItem(LAST_DAY_KEY,day);detailKey="";render()}
-function chooseUnit(unit){selectedUnit=unit;localStorage.setItem(UNIT_FILTER_KEY,unit);detailKey="";render()}
+function chooseDay(day){
+  rememberFilterScroll();
+  saveCurrentDay();
+  selected=day;
+  if(day!=="全部")localStorage.setItem(LAST_DAY_KEY,day);
+  detailKey="";
+  render();
+  requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"auto"}));
+}
+function chooseUnit(unit){
+  rememberFilterScroll();
+  selectedUnit=unit;
+  localStorage.setItem(UNIT_FILTER_KEY,unit);
+  detailKey="";
+  render();
+}
 function saveCurrentDay(){if(selected==="全部")return;const d=currentSelection();saveDay(selected,d.films,d.activities,d.specials)}
 function currentSelection(){return loadDay(selected)}
 function selectedMaps(){const d=selected==="全部"?allSaved():currentSelection();return{films:new Set((d.films||[]).map(x=>x.key)),activities:new Set((d.activities||[]).map(x=>x.key)),specials:new Set((d.specials||[]).map(x=>x.key))}}
