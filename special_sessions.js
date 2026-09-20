@@ -1,5 +1,4 @@
 const SPECIAL_SESSIONS=[
-{date:"9/24",weekday:"周四",start:"10:00",end:"11:30",kind:"corner",unit:"平遥一角",venue:"1号厅",title:"短片开幕活动暨开幕短片《周日晚上》放映",en:"Opening Ceremony for Pingyao Corner & Shorts · Opening Short Film SUNDAY NIGHT",status:"开幕活动 · 短片放映",meta:"凭票入场 By Ticket Only"},
 {date:"9/25",weekday:"周五",start:"10:00",end:"11:30",kind:"corner",unit:"平遥一角",venue:"1号厅",title:"短片开幕活动暨开幕短片《周日晚上》放映",en:"Opening Ceremony for Pingyao Corner & Shorts · Opening Short Film SUNDAY NIGHT",status:"开幕活动 · 短片放映",meta:"凭票入场 By Ticket Only"},
 {date:"9/25",weekday:"周五",start:"13:30",end:"15:19",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"91次击碎 / 核桃落下的时候 / 落雾",en:"91 TIMES SMASH / IF A WALNUT FALLS / FALLING MIST",status:"首场放映 · 54min",meta:"映前10min BS + 映后45min AS"},
 {date:"9/25",weekday:"周五",start:"16:30",end:"18:21",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"上海戏剧学院 / 中央戏剧学院",en:"SHANGHAI THEATRE ACADEMY / THE CENTRAL ACADEMY OF DRAMA",status:"首映场 · 56min",meta:"映前10min BS + 映后45min AS"},
@@ -20,7 +19,9 @@ const SPECIAL_SESSIONS=[
 {date:"9/29",weekday:"周二",start:"11:30",end:"12:26",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"上海戏剧学院 / 中央戏剧学院",en:"SHANGHAI THEATRE ACADEMY / THE CENTRAL ACADEMY OF DRAMA",status:"重复场 · 56min",meta:"Repetition"},
 {date:"9/29",weekday:"周二",start:"13:30",end:"15:17",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"91次击碎 / 核桃落下的时候 / 落雾 / 窗外 / 灵雨",en:"91 TIMES SMASH / IF A WALNUT FALLS / FALLING MIST / OUT OF WINDOW / THE SHEDDING RAIN",status:"重复场 · 107min",meta:"Repetition"},
 {date:"9/29",weekday:"周二",start:"16:00",end:"17:40",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"北京电影学院 / 上海温哥华电影学院",en:"BEIJING FILM ACADEMY / SHANGHAI VANCOUVER FILM SCHOOL",status:"重复场 · 100min",meta:"Repetition"},
-{date:"9/30",weekday:"周三",start:"13:30",end:"15:17",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"妮儿 / 午散 / 乘浪游去 / 空 / 砂之歌 / 天天的秘密",en:"NI'ER / AFTERNOON HEARSAY / UNDER THE WAVE OF LITTLE DRAGON / HOLLOWED / AS A CURE / OUR SECRETS",status:"重复场 · 107min",meta:"Repetition"}
+{date:"9/30",weekday:"周三",start:"13:30",end:"15:17",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"妮儿 / 午散 / 乘浪游去 / 空 / 砂之歌 / 天天的秘密",en:"NI'ER / AFTERNOON HEARSAY / UNDER THE WAVE OF LITTLE DRAGON / HOLLOWED / AS A CURE / OUR SECRETS",status:"重复场 · 107min",meta:"Repetition"},
+{date:"9/30",weekday:"周三",start:"11:30",end:"12:50",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"中国传媒大学 / 山西传媒学院",en:"COMMUNICATION UNIVERSITY OF CHINA / SHANXI FILM ACADEMY, COMMUNICATION UNIVERSITY OF SHANXI",status:"重复场 · 80min",meta:"Repetition"},
+{date:"9/30",weekday:"周三",start:"16:00",end:"17:30",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"上海大学上海电影学院 / 香港浸会大学电影学院",en:"SHANGHAI FILM ACADEMY, SHANGHAI UNIVERSITY / ACADEMY OF FILM, HONG KONG BAPTIST UNIVERSITY",status:"重复场 · 90min",meta:"Repetition"}
 ];
 SPECIAL_SESSIONS.forEach(x=>x.key=`${x.date}|${x.start}|${x.unit}|${x.title}`);
 window.SPECIAL_SESSIONS=SPECIAL_SESSIONS;

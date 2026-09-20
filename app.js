@@ -1,9 +1,12 @@
 const days=["9/24","9/25","9/26","9/27","9/28","9/29","9/30"];
 const STORAGE_KEY="pingyao2026_h5_selected_by_day_v1";
 const LAST_DAY_KEY="pingyao2026_h5_last_open_day_v1";
+const UNIT_FILTER_KEY="pingyao2026_h5_unit_filter_v1";
 const $=s=>document.querySelector(s);
 const daysEl=$("#days"), timelineEl=$("#timeline"), toastEl=$("#toast");
 let selected=localStorage.getItem(LAST_DAY_KEY)||"9/24";
+let selectedUnit=localStorage.getItem(UNIT_FILTER_KEY)||"全部";
+if(!["全部","藏龙","卧虎","首映","平遥十年","藏龙短片","平遥一角","其他"].includes(selectedUnit)) selectedUnit="全部";
 if(![...days,"全部"].includes(selected)) selected="9/24";
 let detailKey="", calendarMode="day", shareBlob=null, shareDataUrl="";
 
@@ -19,18 +22,42 @@ function detailLines(v){return String(v||"").split(/[；;]\s*/).filter(Boolean).
 function loadAll(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")||{}}catch(e){return {}}}
 function saveAll(all){localStorage.setItem(STORAGE_KEY,JSON.stringify(all))}
 function saveDay(day,films,activities,specials){const all=loadAll();const old=all[day]||{};all[day]={films,activities,specials:specials||old.specials||[]};saveAll(all)}
-function loadDay(day){const d=loadAll()[day]||{};return{films:d.films||[],activities:d.activities||[],specials:d.specials||[]}}
-function allSaved(){const all=loadAll(),films=[],activities=[],specials=[];days.forEach(d=>{const x=all[d]||{};(x.films||[]).forEach(v=>films.push(v));(x.activities||[]).forEach(v=>activities.push(v));(x.specials||[]).forEach(v=>specials.push(v))});return{films,activities,specials}}
+function loadDay(day){const d=loadAll()[day]||{};const validSpecialKeys=new Set((window.SPECIAL_SESSIONS||[]).map(x=>x.key));return{films:d.films||[],activities:d.activities||[],specials:(d.specials||[]).filter(x=>validSpecialKeys.has(x.key))}}
+function allSaved(){const all=loadAll(),films=[],activities=[],specials=[],validSpecialKeys=new Set((window.SPECIAL_SESSIONS||[]).map(x=>x.key));days.forEach(d=>{const x=all[d]||{};(x.films||[]).forEach(v=>films.push(v));(x.activities||[]).forEach(v=>activities.push(v));(x.specials||[]).filter(v=>validSpecialKeys.has(v.key)).forEach(v=>specials.push(v))});return{films,activities,specials}}
 function showToast(msg){toastEl.textContent=msg;toastEl.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.classList.remove("show"),1800)}
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
-function renderDays(){daysEl.innerHTML=["全部",...days].map(d=>`<button class="day ${selected===d?"active":""}" data-day="${d}">${d}</button>`).join("");daysEl.querySelectorAll(".day").forEach(b=>b.onclick=()=>chooseDay(b.dataset.day))}
+function renderDays(){
+  daysEl.innerHTML=`<div class="filterRow dateFilterRow">${["全部",...days].map(d=>`<button class="day ${selected===d?"active":""}" data-day="${d}">${d}</button>`).join("")}</div><div class="filterRow unitFilterRow">${["全部","藏龙","卧虎","首映","平遥十年","藏龙短片","平遥一角","其他"].map(u=>`<button class="unitFilter ${selectedUnit===u?"active":""}" data-unit="${u}">${u}</button>`).join("")}</div>`;
+  daysEl.querySelectorAll(".day").forEach(b=>b.onclick=()=>chooseDay(b.dataset.day));
+  daysEl.querySelectorAll(".unitFilter").forEach(b=>b.onclick=()=>chooseUnit(b.dataset.unit));
+}
 function chooseDay(day){saveCurrentDay();selected=day;if(day!=="全部")localStorage.setItem(LAST_DAY_KEY,day);detailKey="";render()}
+function chooseUnit(unit){selectedUnit=unit;localStorage.setItem(UNIT_FILTER_KEY,unit);detailKey="";render()}
 function saveCurrentDay(){if(selected==="全部")return;const d=currentSelection();saveDay(selected,d.films,d.activities,d.specials)}
 function currentSelection(){return loadDay(selected)}
 function selectedMaps(){const d=selected==="全部"?allSaved():currentSelection();return{films:new Set((d.films||[]).map(x=>x.key)),activities:new Set((d.activities||[]).map(x=>x.key)),specials:new Set((d.specials||[]).map(x=>x.key))}}
-function refreshTop(){const one=selected!=="全部";$("#smartBox").hidden=!one;$("#tip").hidden=!one;$("#allTip").hidden=one;$("#tip").textContent="金色为电影排片；绿色为大师·对话。大师班也可直接用＋/−加入或移出今日安排；智能安排会把大师班计入时间表。"}
-function render(){renderDays();refreshTop();const maps=selectedMaps();const raw=(selected==="全部"?SCHEDULE:SCHEDULE.filter(x=>x[0]===selected)).slice().sort((a,b)=>dayIndex(a[0])-dayIndex(b[0])||a[2].localeCompare(b[2]));const acts=(selected==="全部"?MASTER_ACTIVITIES:MASTER_ACTIVITIES.filter(x=>x.date===selected)).slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));const specials=(selected==="全部"?SPECIAL_SESSIONS:SPECIAL_SESSIONS.filter(x=>x.date===selected)).slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));const timeline=[];raw.forEach(x=>timeline.push({type:"film",start:x[2].split("-")[0],date:x[0],item:x}));acts.forEach(x=>timeline.push({type:"activity",start:x.start,date:x.date,item:x}));specials.forEach(x=>timeline.push({type:"special",start:x.start,date:x.date,item:x}));timeline.sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start)||(a.type==="activity"?-1:(b.type==="activity"?1:a.type==="special"?-1:(b.type==="special"?1:0))));timelineEl.innerHTML=timeline.map(x=>x.type==="film"?filmHtml(x.item,maps.films):x.type==="activity"?activityHtml(x.item,maps.activities):specialHtml(x.item,maps.specials)).join("");bindTimeline();const d=selected==="全部"?allSaved():currentSelection();$("#selectedCount").textContent=d.films.length;$("#activityCountText").textContent=(d.activities.length?` + ${d.activities.length} 场大师班`:"")+(d.specials.length?` + ${d.specials.length} 场特别单元`:"")}
+function refreshTop(){const one=selected!=="全部";$("#smartBox").hidden=!one;$("#tip").hidden=!one;$("#allTip").hidden=one;$("#tip").textContent="金色为电影排片；绿色为大师·对话；蓝色为平遥一角；紫色为藏龙·短片。当前可用单元筛选进一步缩小排片范围。"}
+function matchesUnit(type,item){
+  if(selectedUnit==="全部") return true;
+  if(type==="special") return selectedUnit==="藏龙短片" ? item.kind==="short" : selectedUnit==="平遥一角" ? item.kind==="corner" : false;
+  const u=String(item[9]||"");
+  if(selectedUnit==="藏龙") return u.includes("藏龙");
+  if(selectedUnit==="卧虎") return u.includes("卧虎");
+  if(selectedUnit==="首映") return u.includes("首映");
+  if(selectedUnit==="平遥十年") return u.includes("平遥十年");
+  if(selectedUnit==="藏龙短片"||selectedUnit==="平遥一角") return false;
+  return !u.includes("藏龙")&&!u.includes("卧虎")&&!u.includes("首映")&&!u.includes("平遥十年");
+}
+function render(){
+  renderDays();refreshTop();const maps=selectedMaps();
+  const raw=(selected==="全部"?SCHEDULE:SCHEDULE.filter(x=>x[0]===selected)).filter(x=>matchesUnit("film",x)).slice().sort((a,b)=>dayIndex(a[0])-dayIndex(b[0])||a[2].localeCompare(b[2]));
+  const acts=(selected==="全部"?MASTER_ACTIVITIES:MASTER_ACTIVITIES.filter(x=>x.date===selected)).filter(x=>selectedUnit==="全部"||selectedUnit==="其他").slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));
+  const specials=(selected==="全部"?SPECIAL_SESSIONS:SPECIAL_SESSIONS.filter(x=>x.date===selected)).filter(x=>matchesUnit("special",x)).slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));
+  const timeline=[];raw.forEach(x=>timeline.push({type:"film",start:x[2].split("-")[0],date:x[0],item:x}));acts.forEach(x=>timeline.push({type:"activity",start:x.start,date:x.date,item:x}));specials.forEach(x=>timeline.push({type:"special",start:x.start,date:x.date,item:x}));
+  timeline.sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start)||(a.type==="activity"?-1:(b.type==="activity"?1:a.type==="special"?-1:(b.type==="special"?1:0))));
+  timelineEl.innerHTML=timeline.map(x=>x.type==="film"?filmHtml(x.item,maps.films):x.type==="activity"?activityHtml(x.item,maps.activities):specialHtml(x.item,maps.specials)).join("");bindTimeline();const d=selected==="全部"?allSaved():currentSelection();$("#selectedCount").textContent=d.films.length;$("#activityCountText").textContent=(d.activities.length?` + ${d.activities.length} 场大师班`:"")+(d.specials.length?` + ${d.specials.length} 场特别单元`:"");
+}
 function filmHtml(item,map){const k=keyOf(item),sel=map.has(k),info=cleanDetail(FILM_DETAILS[item[4]]||{});let detail="";if(detailKey===k){detail=`<div class="inlineDetail"><div class="detailBlock"><span class="label">单元</span>${escapeHtml(info.unit||item[9]||"")}</div>${info.director?`<div class="detailBlock"><span class="label">导演</span>${escapeHtml(info.director)}</div>`:""}${info.cast?`<div class="detailBlock"><span class="label">主创 / 主演</span>${escapeHtml(info.cast)}</div>`:""}${info.festival?`<div class="detailBlock"><span class="label">电影节履历</span>${detailLines(info.festival)}</div>`:""}${info.awards?`<div class="award"><span class="label">获奖 / 提名信息</span>${detailLines(info.awards)}</div>`:""}<div class="inlineActions"><button data-action="toggleFilm" data-key="${escapeHtml(k)}">${sel?"取消选择":"加入今日观影日历"}</button><button data-action="closeDetail">收起</button></div></div>`}
 return `<div class="movie ${sel?"selected":""}"><img class="movieIcon" src="assets/${["ticket.png","reel.png","camera.png","filmstrip.png","ticket.png","clapper.png"][SCHEDULE.indexOf(item)%6]}" alt=""><div class="time">${escapeHtml(item[2])}</div><div class="main" data-action="openFilm" data-key="${escapeHtml(k)}"><div class="film">${escapeHtml(item[4])}</div>${item[5]?`<div class="en">${escapeHtml(item[5])}</div>`:""}<div class="place">${escapeHtml(item[3])}${item[9]?` · ${escapeHtml(item[9])}`:""}</div><div class="tags">${item[6]?`<span class="tag">${escapeHtml(item[6])}</span>`:""}${item[7]?`<span class="tag creator">映前</span>`:""}${item[8]?`<span class="tag creator">映后</span>`:""}</div></div><div class="movieActions"><div class="movieActionRow" data-action="toggleFilm" data-key="${escapeHtml(k)}"><span class="plus ${sel?"minus":""}">${sel?"−":"＋"}</span><span class="actionLabel">加入日程</span></div><div class="ticketRow movieActionRow" data-action="ticket" data-key="${escapeHtml(k)}"><span class="ticketEmoji">🎫</span><span class="actionLabel">前往购票</span></div></div></div>${detail}`}
 function activityHtml(a,map){const k=activityKey(a),sel=map.has(k),detail=detailKey===k?`<div class="inlineDetail activityDetail"><div class="detailBlock"><span class="label">嘉宾 / Guests</span>${escapeHtml(a.guests||"")}</div><div class="detailBlock"><span class="label">主持 / Moderator</span>${escapeHtml(a.moderator||"")}</div><div class="detailBlock"><span class="label">地点 / Venue</span>${escapeHtml(a.venue||"")}</div><div class="inlineActions"><button data-action="toggleActivity" data-key="${escapeHtml(k)}">${sel?"取消选择":"加入今日观影日历"}</button><button data-action="closeDetail">收起</button></div></div>`:"";return `<div class="activity ${sel?"selected":""}"><img class="activityIcon" src="assets/clapper.png" alt=""><div class="activityTime">${escapeHtml(a.start)}<small>—${escapeHtml(a.end)}</small></div><div class="activityMain" data-action="openActivity" data-key="${escapeHtml(k)}"><span class="activityTag">大师·对话</span><div class="activityTitle">${escapeHtml(a.title)}</div>${a.en?`<div class="activityEn">${escapeHtml(a.en)}</div>`:""}<div class="activityVenue">${escapeHtml(a.venue)}</div></div><div class="activityActionRow" data-action="toggleActivity" data-key="${escapeHtml(k)}"><span class="plus activityPlus ${sel?"activityMinus":""}">${sel?"−":"＋"}</span><span class="actionLabel">加入日程</span></div></div>${detail}`}
