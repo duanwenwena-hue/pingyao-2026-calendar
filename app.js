@@ -6,7 +6,7 @@ const $=s=>document.querySelector(s);
 const daysEl=$("#days"), timelineEl=$("#timeline"), toastEl=$("#toast");
 let selected=localStorage.getItem(LAST_DAY_KEY)||"9/24";
 let selectedUnit=localStorage.getItem(UNIT_FILTER_KEY)||"全部";
-if(!["全部","藏龙","卧虎","首映","平遥十年","藏龙短片","平遥一角","其他"].includes(selectedUnit)) selectedUnit="全部";
+if(!["全部","藏龙","卧虎","首映","大师班","平遥十年","特别展映","藏龙短片","平遥一角"].includes(selectedUnit)) selectedUnit="全部";
 if(![...days,"全部"].includes(selected)) selected="9/24";
 let detailKey="", calendarMode="day", shareBlob=null, shareDataUrl="";
 
@@ -28,7 +28,7 @@ function showToast(msg){toastEl.textContent=msg;toastEl.classList.add("show");cl
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
 function renderDays(){
-  daysEl.innerHTML=`<div class="filterRow dateFilterRow">${["全部",...days].map(d=>`<button class="day ${selected===d?"active":""}" data-day="${d}">${d}</button>`).join("")}</div><div class="filterRow unitFilterRow">${["全部","藏龙","卧虎","首映","平遥十年","藏龙短片","平遥一角","其他"].map(u=>`<button class="unitFilter ${selectedUnit===u?"active":""}" data-unit="${u}">${u}</button>`).join("")}</div>`;
+  daysEl.innerHTML=`<div class="filterRow dateFilterRow">${["全部",...days].map(d=>`<button class="day ${selected===d?"active":""}" data-day="${d}">${d}</button>`).join("")}</div><div class="filterRow unitFilterRow">${["全部","藏龙","卧虎","首映","大师班","平遥十年","特别展映","藏龙短片","平遥一角"].map(u=>`<button class="unitFilter ${selectedUnit===u?"active":""}" data-unit="${u}">${u}</button>`).join("")}</div>`;
   daysEl.querySelectorAll(".day").forEach(b=>b.onclick=()=>chooseDay(b.dataset.day));
   daysEl.querySelectorAll(".unitFilter").forEach(b=>b.onclick=()=>chooseUnit(b.dataset.unit));
 }
@@ -46,13 +46,14 @@ function matchesUnit(type,item){
   if(selectedUnit==="卧虎") return u.includes("卧虎");
   if(selectedUnit==="首映") return u.includes("首映");
   if(selectedUnit==="平遥十年") return u.includes("平遥十年");
-  if(selectedUnit==="藏龙短片"||selectedUnit==="平遥一角") return false;
-  return !u.includes("藏龙")&&!u.includes("卧虎")&&!u.includes("首映")&&!u.includes("平遥十年");
+  if(selectedUnit==="特别展映") return u.includes("特别展映");
+  if(selectedUnit==="藏龙短片"||selectedUnit==="平遥一角"||selectedUnit==="大师班") return false;
+  return false;
 }
 function render(){
   renderDays();refreshTop();const maps=selectedMaps();
   const raw=(selected==="全部"?SCHEDULE:SCHEDULE.filter(x=>x[0]===selected)).filter(x=>matchesUnit("film",x)).slice().sort((a,b)=>dayIndex(a[0])-dayIndex(b[0])||a[2].localeCompare(b[2]));
-  const acts=(selected==="全部"?MASTER_ACTIVITIES:MASTER_ACTIVITIES.filter(x=>x.date===selected)).filter(x=>selectedUnit==="全部"||selectedUnit==="其他").slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));
+  const acts=(selected==="全部"?MASTER_ACTIVITIES:MASTER_ACTIVITIES.filter(x=>x.date===selected)).filter(x=>selectedUnit==="全部"||selectedUnit==="大师班").slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));
   const specials=(selected==="全部"?SPECIAL_SESSIONS:SPECIAL_SESSIONS.filter(x=>x.date===selected)).filter(x=>matchesUnit("special",x)).slice().sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start));
   const timeline=[];raw.forEach(x=>timeline.push({type:"film",start:x[2].split("-")[0],date:x[0],item:x}));acts.forEach(x=>timeline.push({type:"activity",start:x.start,date:x.date,item:x}));specials.forEach(x=>timeline.push({type:"special",start:x.start,date:x.date,item:x}));
   timeline.sort((a,b)=>dayIndex(a.date)-dayIndex(b.date)||a.start.localeCompare(b.start)||(a.type==="activity"?-1:(b.type==="activity"?1:a.type==="special"?-1:(b.type==="special"?1:0))));
