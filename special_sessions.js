@@ -1,5 +1,4 @@
 const SPECIAL_SESSIONS=[
-{date:"9/25",weekday:"周五",start:"10:00",end:"11:30",kind:"corner",unit:"平遥一角",venue:"1号厅",title:"短片开幕活动暨开幕短片《周日晚上》放映",en:"Opening Ceremony for Pingyao Corner & Shorts · Opening Short Film SUNDAY NIGHT",status:"开幕活动 · 短片放映",meta:"凭票入场 By Ticket Only"},
 {date:"9/25",weekday:"周五",start:"13:30",end:"15:19",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"91次击碎 / 核桃落下的时候 / 落雾",en:"91 TIMES SMASH / IF A WALNUT FALLS / FALLING MIST",status:"首场放映 · 54min",meta:"映前10min BS + 映后45min AS"},
 {date:"9/25",weekday:"周五",start:"16:30",end:"18:21",kind:"corner",unit:"平遥一角",venue:"4号厅",title:"上海戏剧学院 / 中央戏剧学院",en:"SHANGHAI THEATRE ACADEMY / THE CENTRAL ACADEMY OF DRAMA",status:"首映场 · 56min",meta:"映前10min BS + 映后45min AS"},
 {date:"9/25",weekday:"周五",start:"19:30",end:"20:24",kind:"short",unit:"藏龙·短片",venue:"4号厅",title:"91次击碎 / 核桃落下的时候 / 落雾",en:"91 TIMES SMASH / IF A WALNUT FALLS / FALLING MIST",status:"产业场 · 54min",meta:"Industry Screening"},
