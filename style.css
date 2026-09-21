@@ -19,3 +19,13 @@
 .saveGuideTip{text-align:center;font-size:13px;font-weight:800;color:var(--teal);line-height:1.6;margin:10px 4px 2px}
 .saveGuideTip small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
 .saveGuideBack{width:100%;margin-top:12px;background:#DDD5C5;color:#3D4848;font-size:13px;border-radius:4px;padding:9px}
+/* 普通活动：与大师·对话、电影、短片使用不同的复古橙色体系 */
+.eventActivity{background:#F0E1CE;border:1px solid #D2B08A;border-left:6px solid #A36A3C;box-shadow:4px 4px 0 rgba(23,54,58,.08)}
+.eventActivity.selected{box-shadow:0 0 0 3px #A36A3C inset,4px 4px 0 rgba(23,54,58,.08);background:#E9D5BA}
+.eventActivity .activityTime{color:#8A5935}
+.eventActivity .activityTag{background:#A36A3C;color:#FFF7E6}
+.eventActivity .activityVenue{color:#765D4A}
+.eventActivity .activityPrice{font-size:11px;color:#A36A3C;font-weight:800;margin-top:5px}
+.eventActivity .eventPlus{background:#A36A3C}
+.eventDetail{border-left-color:#A36A3C}
+.calActivity.event{border-left-color:#A36A3C;background:#F0E1CE}
