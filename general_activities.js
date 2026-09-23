@@ -1,5 +1,12 @@
 const GENERAL_ACTIVITIES = [
   {
+    date:"9/27", weekday:"周日", start:"21:30", end:"00:00",
+    title:"十周年特别策划——时光切片｜电子混音DJ音乐会", en:"SLICES OF TIME: AN ELECTRONIC REMIX DJ SET",
+    venue:"门厅 FOYER", kind:"活动", unit:"十周年特别策划—时光切片｜电子混音DJ音乐会",
+    poster:"assets/time_slice_poster.png"
+  },
+
+  {
     date:"9/25", weekday:"周五", start:"14:00", end:"17:00",
     title:"迁徙计划·从文学到影视（上）", en:"Literary Picturized Project (Part1)",
     venue:"门厅 FOYER", kind:"活动", unit:"迁徙计划·从文学到影视 LPP"

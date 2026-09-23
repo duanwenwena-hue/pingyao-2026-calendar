@@ -28,3 +28,6 @@
 .eventActivity .eventPlus{background:#A36A3C}
 .eventDetail{border-left-color:#A36A3C}
 .calActivity.event{border-left-color:#A36A3C;background:#F0E1CE}
+
+.activityPoster{width:64px;height:82px;object-fit:cover;border-radius:4px;flex:none;z-index:3;box-shadow:1px 1px 0 rgba(0,0,0,.08)}
+.activityActions{width:82px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;z-index:4;flex:none}.activityTicketRow{display:flex;align-items:center;min-height:24px;padding-left:2px;cursor:pointer}.activityTicketRow .actionLabel{color:var(--red);font-size:11px}.activityActions .activityActionRow{width:82px}

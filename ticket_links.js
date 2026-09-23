@@ -44,7 +44,8 @@ const TICKET_LINKS = {
   "费穆": "https://www.pyiffestival.com/FilmDetail/08df1480-75eb-4689-8572-f4ce20d66eaa",
   "都灵之影 × 五条人「县·城·记」": "https://www.pyiffestival.com/FilmDetail/08df13ce-6a68-4422-80e6-fd8b825fed44",
   "黑潮": "https://www.pyiffestival.com/FilmDetail/08df0ee6-7ebe-4006-8072-431023afe61f",
-  "罗西里尼": "https://www.pyiffestival.com/FilmDetail/08df1480-b4ba-4f89-8095-75668d818a0f"
+  "罗西里尼": "https://www.pyiffestival.com/FilmDetail/08df1480-b4ba-4f89-8095-75668d818a0f",
+  "爱情笑话": "https://www.pyiffestival.com/Tickets"
 }
 const FILM_LIST_URL = "https://www.pyiffestival.com/FilmList"
 window.TICKET_LINKS = TICKET_LINKS; window.FILM_LIST_URL = FILM_LIST_URL;
